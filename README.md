@@ -1,10 +1,8 @@
 
 
-Numeric test functions for hierarchical parameter spaces  [
-
-For experimental use you can install the latest development version:
+TODOTODO
 
 ```r
-devtools::install_github("danielhorn/hierarchTestFuns")
+devtools::install_github("https://github.com/danielhorn/SABeR")
 
 ```

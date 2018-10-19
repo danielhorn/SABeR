@@ -9,8 +9,12 @@ URL: https://github.com/danielhorn/hierarchTestFuns
 BugReports: https://github.com/danielhorn/moobench/hierarchTestFuns
 Encoding: UTF-8
 Imports:
-    checkmate,
     BBmisc,
+    checkmate,
+    igraph,
+    PMCMR,
+    reshape2,
+    stats,
     testthat
 LazyData: true
 RoxygenNote: 6.1.0
