@@ -49,8 +49,7 @@ saberIt <- function(data, perfName, expParName, algoName, replName, clusterFunct
   data.clusterd <- split(data, data$.clustID)
   
   # Cluster-Mittelpunkte
-  cluster.mittel <- round(sapply(data.clusterd, function(d) colMeans(d[, expParName])),
-                          digits = 2)
+  cluster.mittel <- sapply(data.clusterd, function(d) colMeans(d[, expParName]))
   
   # Paarweise Tests
   test.results <- pairwiseTests(data.clusterd, perfName = perfName,

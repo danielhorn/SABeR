@@ -68,7 +68,7 @@ plot.saber <- function(x,
   ){
   
   saber.result = x
-  clustmittel = saber.result$cluster.mittel
+  clustmittel = round(saber.result$cluster.mittel,2)
   rankMatrix = saber.result$rank.matrix
   all_pValues = saber.result$test.results
   algoName = saber.result$pars$algoName
