@@ -7,7 +7,9 @@
 # Rueckgabe: 
 # Eine Liste der Laenge der optimalen Clustergroesse in der in jedem Element 
 # alle dieser Clustergruppe zugehoerigen Elemente (in Form ihrer Indizes) stehen.
-clusterFunctionHclust <- function(clust.data, distMethod = "euclidean", clusterMethod = "ward.D"){
+clusterFunctionHclust <- function(clust.data, 
+                                  distMethod = "euclidean", 
+                                  clusterMethod = "ward.D"){
   
   # hierachisches Clustern der Performancewerte.
   h.cluster <- hclust(dist(clust.data, method = distMethod), method = clusterMethod)
