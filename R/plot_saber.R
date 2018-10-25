@@ -135,7 +135,6 @@ plot.saber <- function(x,
     # Einstellungsparameter der vertexes = "Kreise"
     radius <- max(nchar(algo.Name)) * 4
     vertex_names <- paste(colnames(rankMatrix),"\n", round(rankMatrix[i,], digits = 4))
-    # vertex_names <- 1:7
     vertex_attr(graphobject) <- list(
       name = vertex_names,
       color = rep("white", count_algos),
@@ -157,7 +156,7 @@ plot.saber <- function(x,
     plot(graphobject, 
          rescale = FALSE,
          layout = coords,
-         edge.arrow.size = 0.002,
+         edge.arrow.size = 0.2,
          vertex.label.cex = 0.9,
          vertex.label.color = "black",
          edge.width = edge.width,
