@@ -66,7 +66,6 @@ plot.saber <- function(x,
                        testNiveaus = c(1e-10, 1e-5, 1e-2, 5e-1),
                        ...
   ){
-  
   saber.result = x
   clustmittel = round(saber.result$cluster.mittel,2)
   rankMatrix = saber.result$rank.matrix
@@ -135,8 +134,7 @@ plot.saber <- function(x,
     ############################################################################
     # Einstellungsparameter der vertexes = "Kreise"
     radius <- max(nchar(algo.Name)) * 4
-    vertex_names <- paste(colnames(rankMatrix),"\n", round(rankMatrix[i,], digits = 0))
-    
+    vertex_names <- paste(colnames(rankMatrix),"\n", round(rankMatrix[i,], digits = 4))
     vertex_attr(graphobject) <- list(
       name = vertex_names,
       color = rep("white", count_algos),
