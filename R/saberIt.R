@@ -16,7 +16,7 @@
 #' @param clusterFunction [\code{character(1)}] \cr
 #'   Name of the cluster function to be used. At the moment, only 
 #'   clusterFunctionHclust is supported
-#' @return A \code{saber}, object.
+#' @return A \code{saber} object.
 #' 
 #' @export
 
@@ -49,6 +49,7 @@ saberIt <- function(data, perfName, expParName, algoName, replName, clusterFunct
   data.clusterd <- split(data, data$.clustID)
   
   # Cluster-Mittelpunkte
+  ##TODO: Bei diskreten ExpPars nicht sinnvoll
   cluster.mittel <- sapply(data.clusterd, function(d) colMeans(d[, expParName]))
   
   # Paarweise Tests
@@ -63,7 +64,8 @@ saberIt <- function(data, perfName, expParName, algoName, replName, clusterFunct
     cluster.sizes = table(clusters$.clustID),
     pars = list(
       data = data,
-      algoName = algoName
+      algoName = algoName,
+      expParName = expParName
     )
   ), class = "saber")
   
