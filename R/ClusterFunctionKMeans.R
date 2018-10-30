@@ -8,7 +8,7 @@ clusterFunctionHclust <- function(clust.data,
                 index = "gap", alphaBeale = 0.1)
   opt.Clusteranzahl <- nb$Best.nc[1]
   
-  kmeans.cluster <- kmeans(clust.data,2,nstart = 20)
+  kmeans.cluster <- kmeans(clust.data,opt.Clusteranzahl,nstart = 20)
   
   clusters <- data.frame(.expID = names(kmeans.cluster$cluster), 
                          .clustID = kmeans.cluster$cluster, row.names = NULL)
