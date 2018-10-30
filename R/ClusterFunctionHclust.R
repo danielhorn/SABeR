@@ -13,7 +13,6 @@ clusterFunctionHclust <- function(clust.data,
   
   # hierachisches Clustern der Performancewerte.
   h.cluster <- hclust(dist(clust.data, method = distMethod), method = clusterMethod)
-  browser()
   #TODO: Cluster-Size hier manuell auf 3 festgelegt. Automatische Bestimmung fehlt.
   clust.size <- 3
   

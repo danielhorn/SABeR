@@ -5,5 +5,6 @@
 #' @import PMCMR
 #' @import stats
 #' @import reshape2
+#' @import NbClust
 
 NULL
