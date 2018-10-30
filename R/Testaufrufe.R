@@ -1,7 +1,7 @@
 
-# devtools::install_github("danielhorn/SABeR")
+devtools::install_github("danielhorn/SABeR")
 library(SABeR)
-devtools::load_all()
+# devtools::load_all()
 load("mainHiera.RData")
 
 # Parameter main function
@@ -10,7 +10,7 @@ perfName = "ydist"
 expParName = c("a","b","cc","d")
 algoName = "confName"
 replName = "i"
-clusterFunction = "clusterFunctionHclust"
+clusterFunction = "clusterFunctionKMeans"
 
 # parameter plot function
 h = 2

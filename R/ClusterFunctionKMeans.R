@@ -1,4 +1,4 @@
-clusterFunctionHclust <- function(clust.data, 
+clusterFunctionKMeans <- function(clust.data, 
                                   distMethod = "euclidean", 
                                   clusterMethod = "ward.D"){
   
