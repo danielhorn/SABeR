@@ -42,7 +42,9 @@ saberIt <- function(data, perfName, expParName, algoName, replName, clusterFunct
   clust.data <- clust.data[, -1]
   
   # Do the clustering
-  clusters <- cluster(clust.data = clust.data, distMethod = "euclidean", clusterMethod = "ward.D")
+  clusters <- cluster(clust.data = clust.data, 
+                      distMethod = "euclidean", 
+                      clusterMethod = "ward.D")
   
   # Split the data set into the clusters
   data <- merge(data, clusters)

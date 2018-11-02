@@ -1,7 +1,7 @@
 
 devtools::install_github("danielhorn/SABeR")
 library(SABeR)
-# devtools::load_all()
+devtools::load_all()
 load("mainHiera.RData")
 
 # Parameter main function
