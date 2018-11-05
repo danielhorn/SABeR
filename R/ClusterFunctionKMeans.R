@@ -3,7 +3,7 @@ clusterFunctionKMeans <- function(clust.data,
                                   clusterMethod = "ward.D"){
   
   # Bestimmt oprimale Clustergroesse durch gapStatistik
-  nb <- NbClust::NbClust( as.matrix(clust.data), method = "kmeans", 
+  nb <- NbClust::NbClust(as.matrix(clust.data), method = "kmeans", 
                 index = "gap", alphaBeale = 0.1)
   opt.Clusteranzahl <- nb$Best.nc[1]
   
