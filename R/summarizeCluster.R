@@ -12,7 +12,7 @@
 summarizeCluster = function(saber.result) {
   
   data <- saber.result$pars$data
-  expParName <- saber.result$pars$expParName
+  expParName <- rownames(saber.result$cluster.mittel)
   
   data <- data[!duplicated(data$.expID), ]
   n <- nrow(data)
