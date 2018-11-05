@@ -64,8 +64,9 @@ plot.saber <- function(x,
                        testNiveaus = c(1e-10, 1e-5, 1e-2, 5e-1),
                        h = NA,
                        v = NA,
+                       stetig = TRUE,
                        ...
-  ){
+){
   saber.result = x
   clustmittel = round(saber.result$cluster.mittel,2)
   rankMatrix = saber.result$rank.matrix
@@ -129,7 +130,7 @@ plot.saber <- function(x,
       # Entsprechend der connections-Matrix werden die edges = Pfeile erstellt
       arrows <- c(arrows, design_edges(correct_connect[[j]]))
     }
-  
+    
     # Erstelle das Graphenobjekt mit im Kreis der Rangordnung nach geordnete
     # Algorithmen.
     graphobject <- make_empty_graph() + vertices(algo.Name) + edges(arrows)
@@ -148,18 +149,19 @@ plot.saber <- function(x,
       size = rep(radius, count_algos),
       shape = rep(shape, count_algos))
     vertex_attr(graphobject)$color[ord_index[1]] <- rgb(255 ,83 ,40 , 
-                                                        maxColorValue = 256)
-
-    subtitle <- c("Clustermittel: \n")
-    rnames <- rownames(clustmittel)
-    nr <- nrow(clustmittel)
-    if(nr != 1){
-      for(k in 1:(nr - 1)){
-        subtitle <- paste(subtitle, rnames[k], "=", clustmittel[k,i],",")    
+                                                    maxColorValue = 256)
+    subtitle <- ""
+    if(stetig){
+      subtitle <- c("Clustermittel: \n")
+      rnames <- rownames(clustmittel)
+      nr <- nrow(clustmittel)
+      if(nr != 1){
+        for(k in 1:(nr - 1)){
+          subtitle <- paste(subtitle, rnames[k], "=", clustmittel[k,i],",")    
+        }
       }
-    }
-    subtitle <- paste(subtitle, rnames[nr], "=", clustmittel[nr,i])
-    
+      subtitle <- paste(subtitle, rnames[nr], "=", clustmittel[nr,i])
+    }    
     plot(graphobject, 
          rescale = FALSE,
          layout = coords,
