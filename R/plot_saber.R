@@ -59,11 +59,11 @@
 # Rueckgabe:
 # Ein Plot mit den benoetigten gerichteten Graphen zu allen Clustergruppen
 plot.saber <- function(x,
-                       h = 3,# Maaße muss automatisiert bestimmt werden...
-                       v = 2,
                        shape = "circle",
                        edge.width = 1,
                        testNiveaus = c(1e-10, 1e-5, 1e-2, 5e-1),
+                       h = NA,
+                       v = NA,
                        ...
   ){
   saber.result = x
@@ -90,6 +90,13 @@ plot.saber <- function(x,
   colnames(connection_matrix) <- algo.Name
   
   # Erstelle passend zu jeder Testmatrix ein gerichteter Graph:
+  # Passende Fenstergroesse festlegen, falls nicht schon vorgegeben:
+  if(is.na(h) || is.na(v)){
+    clusteranzahl <- length(saber.result$cluster.sizes)
+    h <- ceiling(sqrt(clusteranzahl + 1))
+    v <- h
+  }
+  
   par(mfrow = c(h, v))
   for(i in 1:length(all_pValues)){
     # Erstelle passend zu den Testresultaten zum aktuellen Niveau die
@@ -156,7 +163,7 @@ plot.saber <- function(x,
     plot(graphobject, 
          rescale = FALSE,
          layout = coords,
-         edge.arrow.size = 0.01,
+         edge.arrow.size = 0.05,
          vertex.label.cex = 0.9,
          vertex.label.color = "black",
          edge.width = edge.width,
