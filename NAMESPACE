@@ -2,6 +2,7 @@
 
 S3method(plot,saber)
 export(saberIt)
+export(summarizeCluster)
 import(BBmisc)
 import(PMCMR)
 import(checkmate)
