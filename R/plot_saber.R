@@ -65,6 +65,7 @@ plot.saber <- function(x,
                        h = NA,
                        v = NA,
                        stetig = TRUE,
+                       edge.size = 0.1,
                        ...
 ){
   saber.result = x
@@ -165,7 +166,7 @@ plot.saber <- function(x,
     plot(graphobject, 
          rescale = FALSE,
          layout = coords,
-         edge.arrow.size = 0.05,
+         edge.arrow.size = edge.size,
          vertex.label.cex = 0.9,
          vertex.label.color = "black",
          edge.width = edge.width,
