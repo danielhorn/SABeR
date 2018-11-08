@@ -14,7 +14,7 @@ clusterFunctionHclust <- function(clust.data,
   
   # hierachisches Clustern der Performancewerte.
   h.cluster <- hclust(dist(clust.data, method = distMethod), method = clusterMethod)
-  #TODO: Cluster-Size hier manuell auf 3 festgelegt. Automatische Bestimmung fehlt.
+ 
   nb <- NbClust::NbClust(as.matrix(clust.data), method = clusterMethod, 
     index = idx, alphaBeale = 0.1, max.nc = 3)
   opt.Clusteranzahl <- nb$Best.nc[1]
