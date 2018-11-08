@@ -66,6 +66,7 @@ plot.saber <- function(x,
                        v = NA,
                        stetig = TRUE,
                        edge.size = 0.1,
+                       radius = 48,
                        ...
 ){
   saber.result = x
@@ -142,7 +143,6 @@ plot.saber <- function(x,
     edge_attr(graphobject) <- list(color = rep("black", k) )
     ############################################################################
     # Einstellungsparameter der vertexes = "Kreise"
-    radius <- max(nchar(algo.Name)) * 4
     vertex_names <- paste(colnames(rankMatrix),"\n", round(rankMatrix[i,], digits = 4))
     vertex_attr(graphobject) <- list(
       name = vertex_names,
