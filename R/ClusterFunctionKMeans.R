@@ -1,10 +1,11 @@
 clusterFunctionKMeans <- function(clust.data, 
                                   distMethod = "euclidean", 
-                                  clusterMethod = "ward.D"){
+                                  clusterMethod = "ward.D",
+                                  idx = "dunn"){
   
   # Bestimmt oprimale Clustergroesse durch gapStatistik
   nb <- NbClust::NbClust(as.matrix(clust.data), method = "kmeans", 
-                index = "dunn", alphaBeale = 0.1)
+                index = idx, alphaBeale = 0.1)
   opt.Clusteranzahl <- nb$Best.nc[1]
   
   kmeans.cluster <- kmeans(clust.data,opt.Clusteranzahl,nstart = 20)

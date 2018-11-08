@@ -20,7 +20,7 @@
 #' 
 #' @export
 
-saberIt <- function(data, perfName, expParName, algoName, replName, clusterFunction) {
+saberIt <- function(data, perfName, expParName, algoName, replName, clusterFunction,idx = "dunn") {
   
   assert_string(perfName)
   assert_string(replName)
@@ -44,7 +44,8 @@ saberIt <- function(data, perfName, expParName, algoName, replName, clusterFunct
   # Do the clustering
   clusters <- cluster(clust.data = clust.data, 
                       distMethod = "euclidean", 
-                      clusterMethod = "ward.D")
+                      clusterMethod = "ward.D",
+                      idx = idx)
   
   # Split the data set into the clusters
   data <- merge(data, clusters)
