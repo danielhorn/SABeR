@@ -9,15 +9,18 @@
 # alle dieser Clustergruppe zugehoerigen Elemente (in Form ihrer Indizes) stehen.
 clusterFunctionHclust <- function(clust.data, 
                                   distMethod = "euclidean", 
-                                  clusterMethod = "ward.D"){
+                                  clusterMethod = "ward.D",
+                                  idx = "all"){
   
   # hierachisches Clustern der Performancewerte.
   h.cluster <- hclust(dist(clust.data, method = distMethod), method = clusterMethod)
   #TODO: Cluster-Size hier manuell auf 3 festgelegt. Automatische Bestimmung fehlt.
-  clust.size <- 3
+  nb <- NbClust::NbClust(as.matrix(clust.data), method = clusterMethod, 
+    index = idx, alphaBeale = 0.1, max.nc = 3)
+  opt.Clusteranzahl <- nb$Best.nc[1]
   
   # Erstelle data.frame mit Spalten .expID und .clustID 
-  clusters <- cutree(h.cluster, clust.size)
+  clusters <- cutree(h.cluster, opt.Clusteranzahl)
   clusters <- data.frame(.expID = names(clusters), .clustID = clusters, row.names = NULL)
   
   return(clusters)

@@ -26,7 +26,7 @@ saberIt <- function(data, perfName, expParName, algoName, replName, clusterFunct
   assert_string(replName)
   assert_string(algoName)
   assert_character(expParName)
-  assert_choice(clusterFunction, choices = c("clusterFunctionKMeans"))
+  assert_choice(clusterFunction, choices = c("clusterFunctionKMeans", "clusterFunctionHclust"))
   cluster <- get(clusterFunction)
   assert_data_frame(data)
   
