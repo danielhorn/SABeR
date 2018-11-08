@@ -21,7 +21,6 @@
 #' @export
 
 saberIt <- function(data, perfName, expParName, algoName, replName, clusterFunction,idx = "dunn") {
-  
   assert_string(perfName)
   assert_string(replName)
   assert_string(algoName)
@@ -42,11 +41,16 @@ saberIt <- function(data, perfName, expParName, algoName, replName, clusterFunct
   clust.data <- clust.data[, -1]
   
   # Do the clustering
+  n <- length(levels(data$.expID))
+  repeat{
   clusters <- cluster(clust.data = clust.data, 
                       distMethod = "euclidean", 
                       clusterMethod = "ward.D",
                       idx = idx)
   
+  if(min(table(clusters$.clustID)) >= ceiling(n * 0.1))
+    break
+  }
   # Split the data set into the clusters
   data <- merge(data, clusters)
   data.clusterd <- split(data, data$.clustID)
