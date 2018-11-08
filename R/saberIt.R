@@ -21,7 +21,8 @@
 #' @export
 
 saberIt <- function(data, perfName, expParName, algoName, replName, clusterFunction,
-                    idx = "dunn", minInCluster = length(levels(data$.expID)) * 0.1) {
+                    idx = "dunn", minInCluster = length(levels(data$.expID)) * 0.1,
+                    max.nc = 5) {
   assert_string(perfName)
   assert_string(replName)
   assert_string(algoName)
@@ -47,9 +48,11 @@ saberIt <- function(data, perfName, expParName, algoName, replName, clusterFunct
   clusters <- cluster(clust.data = clust.data, 
                       distMethod = "euclidean", 
                       clusterMethod = "ward.D",
-                      idx = idx)
-  
-  if(min(table(clusters$.clustID)) >= minInCluster)
+                      idx = idx,
+                      max.nc = max.nc)
+  max.nc <- max.nc - 1
+  inCluster <- min(table(clusters$.clustID))
+  if(inCluster >= minInCluster || max.nc == 0)
     break
   }
   # Split the data set into the clusters

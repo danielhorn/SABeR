@@ -10,13 +10,14 @@
 clusterFunctionHclust <- function(clust.data, 
                                   distMethod = "euclidean", 
                                   clusterMethod = "ward.D",
-                                  idx = "all"){
+                                  idx = "all",
+                                  max.nc = 5){
   
   # hierachisches Clustern der Performancewerte.
   h.cluster <- hclust(dist(clust.data, method = distMethod), method = clusterMethod)
  
   nb <- NbClust::NbClust(as.matrix(clust.data), method = clusterMethod, 
-    index = idx, alphaBeale = 0.1, max.nc = 3)
+    index = idx, alphaBeale = 0.1, max.nc = max.nc)
   opt.Clusteranzahl <- nb$Best.nc[1]
   
   # Erstelle data.frame mit Spalten .expID und .clustID 
