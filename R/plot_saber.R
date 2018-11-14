@@ -174,7 +174,7 @@ plot.saber <- function(x,
          vertex.label.color = "black",
          edge.width = edge.width,
          edge.lty = lty_type,
-         sub = "TEST",#statt Test setze folgendes ein: subtitle
+         sub = subtitle,
          cex.sub = subtitleSize)
   }
   plot.new()
