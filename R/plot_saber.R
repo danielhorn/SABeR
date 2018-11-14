@@ -166,6 +166,7 @@ plot.saber <- function(x,
       }
       subtitle <- paste(subtitle, rnames[nr], "=", clustmittel[nr,i])
     }    
+    browser()
     plot(graphobject, 
          rescale = FALSE,
          layout = coords,
