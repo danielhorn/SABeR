@@ -67,6 +67,7 @@ plot.saber <- function(x,
                        stetig = TRUE,
                        edge.size = 0.1,
                        radius = 48,
+                       VertexlabelSize = 1,
                        ...
 ){
   saber.result = x
@@ -167,7 +168,7 @@ plot.saber <- function(x,
          rescale = FALSE,
          layout = coords,
          edge.arrow.size = edge.size,
-         vertex.label.cex = 0.9,
+         vertex.label.cex = VertexlabelSize,
          vertex.label.color = "black",
          edge.width = edge.width,
          edge.lty = lty_type,
