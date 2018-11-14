@@ -69,7 +69,7 @@ plot.saber <- function(x,
                        radius = 48,
                        VertexlabelSize = 1,
                        legendTextSize = 1,
-                       subTitleSize = 1,
+                       xlabSize = 1,
                        ...
 ){
   saber.result = x
@@ -175,7 +175,7 @@ plot.saber <- function(x,
          edge.width = edge.width,
          edge.lty = lty_type,
          xlab = subtitle,
-         cex.lab = subTitleSize,
+         cex.lab = xlabSize,
          ylab = "")
   }
   plot.new()
