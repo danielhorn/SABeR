@@ -69,7 +69,7 @@ plot.saber <- function(x,
                        radius = 48,
                        VertexlabelSize = 1,
                        legendTextSize = 1,
-                       subTtitleSize = 1,
+                       subtitleSize = 1,
                        ...
 ){
   saber.result = x
@@ -175,7 +175,7 @@ plot.saber <- function(x,
          edge.width = edge.width,
          edge.lty = lty_type,
          sub = subtitle,
-         cex.sub = subTtitleSize)
+         cex.sub = subtitleSize)
   }
   plot.new()
   legend(title = "Testniveaus",
