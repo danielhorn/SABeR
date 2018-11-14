@@ -68,6 +68,7 @@ plot.saber <- function(x,
                        edge.size = 0.1,
                        radius = 48,
                        VertexlabelSize = 1,
+                       legendTextSize,
                        ...
 ){
   saber.result = x
@@ -180,6 +181,7 @@ plot.saber <- function(x,
          legend = testNiveaus, 
          lty = 1:nNiveaus,
          col = "black",
-         bty = "n")
+         bty = "n",
+         cex = legendTextSize)
   par(mfrow = c(1,1))
 }
