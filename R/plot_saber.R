@@ -174,9 +174,8 @@ plot.saber <- function(x,
          vertex.label.cex = VertexlabelSize,
          vertex.label.color = "black",
          edge.width = edge.width,
-         edge.lty = lty_type,
-         sub = subtitle,
-         cex.sub = subtitleSize)
+         edge.lty = lty_type)
+    title(sub = subtitle, cex.sub = subtitleSize )
   }
   plot.new()
   legend(title = "Testniveaus",
