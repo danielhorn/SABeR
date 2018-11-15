@@ -32,7 +32,7 @@ saberIt <- function(data, perfName, expParName, algoName, replName, clusterFunct
   assert_data_frame(data)
   
   # Design unique .expID's
-  data$.expID <- factor(apply(mainHiera[, expParName], 1, paste, collapse = "_"))
+  data$.expID <- factor(apply(data[, expParName], 1, paste, collapse = "_"))
   Nlevel <- length(levels(data$.expID))
   
   # Build wide data.frame for clustering
@@ -43,7 +43,7 @@ saberIt <- function(data, perfName, expParName, algoName, replName, clusterFunct
   clust.data <- clust.data[, -1]
   
   # Do the clustering
-  n <- 
+  #n <- 
   repeat{
   clusters <- cluster(clust.data = clust.data, 
                       distMethod = "euclidean", 
