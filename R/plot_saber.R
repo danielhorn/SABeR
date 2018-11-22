@@ -70,6 +70,7 @@ plot.saber <- function(x,
                        VertexlabelSize = 1,
                        legendTextSize = 1,
                        subtitleSize = 1,
+                       legend = TRUE,
                        ...
 ){
   saber.result = x
@@ -153,7 +154,7 @@ plot.saber <- function(x,
       size = rep(radius, count_algos),
       shape = rep(shape, count_algos))
     vertex_attr(graphobject)$color[ord_index[1]] <- rgb(255 ,83 ,40 , 
-                                                    maxColorValue = 256)
+                                                        maxColorValue = 256)
     subtitle <- ""
     if(stetig){
       subtitle <- c("Clustermittel: \n")
@@ -177,12 +178,15 @@ plot.saber <- function(x,
     title(sub = subtitle, cex.sub = subtitleSize )
   }
   plot.new()
-  legend(title = "Testniveaus",
-         "center",
-         legend = testNiveaus, 
-         lty = 1:nNiveaus,
-         col = "black",
-         bty = "n",
-         cex = legendTextSize)
-  par(mfrow = c(1,1))
+  if(legend)
+  {
+    legend(title = "Testniveaus",
+           "center",
+           legend = testNiveaus, 
+           lty = 1:nNiveaus,
+           col = "black",
+           bty = "n",
+           cex = legendTextSize)
+    par(mfrow = c(1,1))
+  }
 }
