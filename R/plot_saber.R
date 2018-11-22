@@ -70,7 +70,7 @@ plot.saber <- function(x,
                        VertexlabelSize = 1,
                        legendTextSize = 1,
                        subtitleSize = 1,
-                       legend = TRUE,
+                       printlegend = TRUE,
                        ...
 ){
   saber.result = x
@@ -178,7 +178,7 @@ plot.saber <- function(x,
     title(sub = subtitle, cex.sub = subtitleSize )
   }
   plot.new()
-  if(legend)
+  if(printlegend)
   {
     legend(title = "Testniveaus",
            "center",
