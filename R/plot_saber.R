@@ -104,7 +104,8 @@ plot.saber <- function(x,
     v <- h
   }
   
-  par(mfrow = c(h, v))
+  opar <- par(mfrow = c(h, v))
+  on.exit(par(opar))
   for(i in 1:length(all_pValues)){
     # Erstelle passend zu den Testresultaten zum aktuellen Niveau die
     # connectionsmatrix:
