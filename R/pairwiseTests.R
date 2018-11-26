@@ -17,31 +17,15 @@
 #               ist
 pairwiseTests <- function(data.clusterd, perfName, algoName, replName, algo.Name){
   
-  # pairwaise tests with nemenyi test
-  ## TODO: Warum dist = Chisq?
-  results <- lapply(data.clusterd, function(d)
-    posthoc.kruskal.nemenyi.test(d[, perfName], d[, algoName], dist = "Chisq")
-  )
+  results <- lapply(data.clusterd, function(d) {
+    d$.exp.repl.id <- apply(d[, c(".expID", replName)], 1, paste, collapse = "_")
+    pairwiseNemenyiTests(d[, perfName], groups =  d[, algoName],
+      blocks = d[, ".exp.repl.id"])
+  })
   
-  # Calculate mean ranks for each algorithm in each cluster
   
-  # First: function to get ranks for a single experiment
-  getRanks <- function(s) {
-    # make sure data has a well-defined order and calculate ranks
-    s <- s[order(s[, algoName]), ]
-    ranks <- rank(s[, perfName])
-    names(ranks) <- s[, algoName]
-    ranks
-  }
+  p.values <- extractSubList(results, "statistic", simplify = FALSE)
+  rank.matrix <- extractSubList(results, "rank.means", simplify = TRUE)
   
-  # Second: function to get mean ranks for a complete cluster
-  getMeanRanks <- function(d) {
-    # split data into single experiments and calculate mean ranks
-    blocks <- apply(d[, c(".expID", replName)], 1, paste, collapse = "_")
-    rowMeans(sapply(split(d, blocks), getRanks))
-  }
-
-  rank.matrix <- sapply(data.clusterd, getMeanRanks)
-  
-  return(list(p.values = results, rank.matrix = rank.matrix))
+  return(list(p.values = p.values, rank.matrix = rank.matrix))
 }

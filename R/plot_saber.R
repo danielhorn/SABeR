@@ -117,7 +117,7 @@ plot.saber <- function(x,
     connections <- list()
     testNiveaus <- sort(testNiveaus) # Falls die Niveaus nicht geordnet eingegeben werden
     for(j in 1:length(testNiveaus)){
-      connections[[j]] <- design_matrix(pValues = all_pValues[[i]]$p.value, 
+      connections[[j]] <- design_matrix(pValues = all_pValues[[i]], 
                                         connectMatrix = connection_matrix,
                                         order = ord_index,
                                         testNiveau = testNiveaus[j])
