@@ -24,7 +24,7 @@ saberIt = function(data, perfName, expParName, algoName, replName,
   clusterFunction = "clusterFunctionHclust",
   idx = "dunn",
   minInCluster = length(levels(data$.expID)) * 0.1,
-  max.nc = 5
+  max.nc = nlevels(data[, ".expID"]) / 2
 ) {
   
   assertDataFrame(data)
@@ -79,7 +79,6 @@ saberIt = function(data, perfName, expParName, algoName, replName,
   repeat{
     clusters = cluster(clust.data = clust.data, 
       distMethod = "euclidean", 
-      clusterMethod = "ward.D",
       idx = idx,
       max.nc = max.nc)
     max.nc = max.nc - 1
