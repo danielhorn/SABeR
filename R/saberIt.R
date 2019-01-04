@@ -13,19 +13,21 @@
 #'   Name of the column of data containing the used algorithm
 #' @param replName [\code{character(1)}] \cr
 #'   Name of the column of data containing the replication number
-#' @param clusterFunction [\code{character(1)}] \cr
-#'   Name of the cluster function to be used. At the moment, only 
-#'   clusterFunctionHclust is supported
+#' @param method [\code{character(1)}] \cr
+#'   method used in \code{NbClust}
+#' @param min.in.cluster [\code{numeric(1)}]\cr
+#'   Each found cluster shall contain at least this number of observations.
+#' @param max.nc [\code{numeric(1)}]\cr
+#'   Maximum number of clusters.
+#' @param ... \cr
+#'   Additional parameters for \code{NbClust}
+#'
 #' @return A \code{saber}, object.
 #' 
 #' @export
 
 saberIt = function(data, perfName, expParName, algoName, replName,
-  clusterFunction = "clusterFunctionHclust",
-  idx = "dunn",
-  minInCluster = length(levels(data$.expID)) * 0.1,
-  max.nc = nlevels(data[, ".expID"]) / 2
-) {
+  method = "kmeans", min.in.cluster = n.exps * 0.1, max.nc = n.exps * 0.5, ...) {
   
   assertDataFrame(data)
   
@@ -43,9 +45,6 @@ saberIt = function(data, perfName, expParName, algoName, replName,
     stop("perfName, algoName, replName and expParName must be distinct.")
   }
   
-  assertChoice(clusterFunction, choices = c("clusterFunctionKMeans", "clusterFunctionHclust"))
-  cluster = get(clusterFunction)
-  
   # Design unique .expID's
   data$.expID = factor(apply(data[, expParName], 1, paste0, collapse = "_"))
   data$.expreplID = factor(apply(data[, c(".expID", replName)], 1, paste0, collapse = ";"))
@@ -53,6 +52,10 @@ saberIt = function(data, perfName, expParName, algoName, replName,
   n.exps = nlevels(data$.expID)
   n.algos = nlevels(data[, algoName])
   
+  # Some more asserts
+  assertNumber(min.in.cluster, lower = 1, upper = n.exps)
+  assertNumber(max.nc, lower = 1, upper = n.exps)
+
   # At first, perform tests for complete data 
   global = friedman.test(y = data[, perfName], groups = data[, algoName],
     blocks = data[, ".expreplID"])$p.value
@@ -73,18 +76,26 @@ saberIt = function(data, perfName, expParName, algoName, replName,
   
   
   # Do the clustering
-  # Rule: Every cluster must consist of at least minInCluster observations
+  # Rule: Every cluster must consist of at least min.in.cluster observations
   # If this does not hold, the maximum number of allowed cluster is decreased
-  # TODO: this is inefficient?
+  # TODO: this is inefficient? Unfortunately, NbClust cannot do better...
   repeat{
-    clusters = cluster(clust.data = clust.data, 
-      distMethod = "euclidean", 
-      idx = idx,
-      max.nc = max.nc)
-    max.nc = max.nc - 1
+    nb = NbClust::NbClust(as.matrix(clust.data), method = method, max.nc = max.nc, ...)
+    clusters = data.frame(row.names = NULL,
+      .expID = names(nb$Best.partition), 
+      .clustID = nb$Best.partition
+    )
+    
+    # If minimum amount of observations in a cluster is to small, repeat
     inCluster = min(table(clusters$.clustID))
-    if(inCluster >= minInCluster || max.nc == 0)
+    if(inCluster >= min.in.cluster)
       break
+    max.nc = max.nc - 1
+    if (max.nc == 1) {
+      stop("Decreased max.nc to 1. Please try another cluster method.")
+    }
+    messagef("Decreasing max.nc to %i, since smallest cluster contains only %i observations",
+      max.nc, inCluster)
   }
   
   # Split the data set into the clusters
@@ -110,6 +121,7 @@ saberIt = function(data, perfName, expParName, algoName, replName,
       ranks = t(BBmisc::extractSubList(post.hoc, "rank.means", simplify = TRUE))
     ),
     clusters = clusters,
+    cluster.perf = nb$Best.nc[2],
     pars = list(
       data = data,
       perfName = perfName,

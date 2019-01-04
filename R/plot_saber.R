@@ -11,7 +11,7 @@
 #'   allowed values are the linetypes of \code{plot.igraph}.
 #' @param radius [\code{numeric(1)}]
 #'   Radius of nodes. Default is 48, should be increased for long algorithm names.
-#' @param plot.legend [\code{logical(1)}]
+#' @param print.legend [\code{logical(1)}]
 #'   Should a legend be included? Default is \code{TRUE}.
 #' @param ... [any] \cr
 #'   Additional parameters for \code{plot.igraph}.

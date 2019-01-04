@@ -4,7 +4,9 @@
 \alias{saberIt}
 \title{Statistical Analysis of Benchmark Results}
 \usage{
-saberIt(data, perfName, expParName, algoName, replName, clusterFunction)
+saberIt(data, perfName, expParName, algoName, replName,
+  method = "kmeans", min.in.cluster = n.exps * 0.1, max.nc = n.exps *
+  0.5, ...)
 }
 \arguments{
 \item{data}{[\code{data.frame}] \cr
@@ -22,9 +24,17 @@ Name of the column of data containing the used algorithm}
 \item{replName}{[\code{character(1)}] \cr
 Name of the column of data containing the replication number}
 
-\item{clusterFunction}{[\code{character(1)}] \cr
-Name of the cluster function to be used. At the moment, only 
-clusterFunctionHclust is supported}
+\item{method}{[\code{character(1)}] \cr
+method used in \code{NbClust}}
+
+\item{min.in.cluster}{[\code{numeric(1)}]\cr
+Each found cluster shall contain at least this number of observations.}
+
+\item{max.nc}{[\code{numeric(1)}]\cr
+Maximum number of clusters.}
+
+\item{...}{\cr
+Additional parameters for \code{NbClust}}
 }
 \value{
 A \code{saber}, object.

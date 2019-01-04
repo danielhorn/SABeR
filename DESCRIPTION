@@ -12,9 +12,9 @@ Imports:
     BBmisc,
     checkmate,
     igraph,
-    PMCMR,
-    reshape2,
-    stats,
+    GGally,
+    NbClust,
+    ggplot2,
     testthat
 LazyData: true
 RoxygenNote: 6.1.0

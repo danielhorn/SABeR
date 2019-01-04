@@ -4,38 +4,38 @@
 \alias{plot.saber}
 \title{Plot function for \code{saber} objects
 
-TODO}
+Visualizes the results of a saber analysis with directed graphs.}
 \usage{
-\method{plot}{saber}(x, h = 3, v = 2, shape = "circle",
-  edge.width = 1, testNiveaus = c(1e-10, 1e-05, 0.01, 0.5), ...)
+\method{plot}{saber}(x, test.niveaus = c(1e-10, 1e-05, 0.01, 0.05),
+  lty = c("solid", "longdash", "dotdash",
+  "dotted")[1:length(test.niveaus)], radius = 48, print.legend = TRUE,
+  ...)
 }
 \arguments{
 \item{x}{[\\code{saber.result}] \cr
-TODO}
+Result from \code{saberIt}.}
 
-\item{h}{[\code{integer(1)}] \cr
-TODO}
+\item{test.niveaus}{[\code{numeric()}] \cr
+Which test niveaus should be visualized? At most, 4 niveaus can be specified.}
 
-\item{v}{[\code{integer(1)}] \cr
-TODO}
+\item{lty}{[\code{character()}]\cr
+Line types for the test niveaus. Must have the same length as \code{test.niveaus},
+allowed values are the linetypes of \code{plot.igraph}.}
 
-\item{shape}{[\code{character(1)}] \cr
-TODO}
+\item{radius}{[\code{numeric(1)}]
+Radius of nodes. Default is 48, should be increased for long algorithm names.}
 
-\item{edge.width}{[\code{integer(1)}] \cr
-TODO}
-
-\item{testNiveaus}{[\code{double()}] \cr
-TODO}
+\item{print.legend}{[\code{logical(1)}]
+Should a legend be included? Default is \code{TRUE}.}
 
 \item{...}{[any] \cr
-Not used.}
+Additional parameters for \code{plot.igraph}.}
 }
 \value{
-Nothing, as a side effect, a plot is generated.
+\code{invisible(NULL)}, as a side effect, a plot is generated.
 }
 \description{
 Plot function for \code{saber} objects
 
-TODO
+Visualizes the results of a saber analysis with directed graphs.
 }

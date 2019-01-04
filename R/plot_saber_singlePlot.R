@@ -16,10 +16,10 @@
 makeSinglePlot = function(vertices, vertex.labels, order, radius, edges, line.types,  subtitle, main, ...) {
   
   args = list(...)
-  edge.arrow.size = BBmisc::coalesce(args$edge.arrow.size, 0.1)
-  vertex.label.cex = BBmisc::coalesce(args$vertex.label.cex, 1)
-  vertex.label.color = BBmisc::coalesce(args$vertex.label.color, "black")
-  edge.width = BBmisc::coalesce(args$edge.width, 1)
+  edge.arrow.size = coalesce(args$edge.arrow.size, 0.1)
+  vertex.label.cex = coalesce(args$vertex.label.cex, 1)
+  vertex.label.color = coalesce(args$vertex.label.color, "black")
+  edge.width = coalesce(args$edge.width, 1)
   
   # Create igraph objject with algorithms ordered in a circle
   graphobject = make_empty_graph() + vertices(vertices) + edges(edges)

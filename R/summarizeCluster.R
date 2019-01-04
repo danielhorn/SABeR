@@ -3,7 +3,7 @@
 #' @description
 #' Summary of the clusters found in the saber analysis
 #'
-#' @param data [\code{saber}] \cr
+#' @param saber.result [\code{saber}] \cr
 #'   Result of saberIt
 #' @return Summary printed on the console as a side effect, a ggplot object is returned
 #' 
@@ -31,7 +31,7 @@ summarizeCluster = function(saber.result) {
   }
   
   plot.data$.clustID = as.factor(data$.clustID)
-  p = GGally::ggpairs(plot.data, columns = 1:3, ggplot2::aes(colour = .clustID))
+  p = ggpairs(plot.data, columns = 1:3, aes_string(colour = ".clustID"))
   
   return(p)
 }
