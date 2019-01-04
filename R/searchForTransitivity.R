@@ -1,3 +1,7 @@
+# TODO: function from NJ. It does what it should do!
+# However, probably must be refactored
+
+
 # Funktion - erkennt welche durch Transitivitaet  ueberfluessigen Verbindungen 
              # anhand einer cmatrix
 # Eingabe:
@@ -46,9 +50,5 @@ searchForTransitivity <- function(result = c(),
   # Ist in dem Resultvektor mindestens eine 1 gefunden worden, so ist die zu
   # untersuchende Verbindung ueberfluessig und es wird TRUE zurueckgegeben 
   # (ansonsten wird FALSE zurueckgegeben)
-  if(sum(result) > 0) { 
-    return(TRUE)
-  } else { 
-    return(FALSE)
-  }
+  return(sum(result) > 0)
 }

@@ -1,3 +1,7 @@
+# TODO: function from NJ. It does what it should do!
+# However, probably must be refactored
+
+
 # Funktion - Entfernt alle durch die Transitivitaetseigenschaft ueberfluessigen
 #            Verbindungen
 # Eingabe: 

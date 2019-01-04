@@ -1,194 +1,98 @@
 #' @title Plot function for \code{saber} objects
 #'
-#' TODO
+#' Visualizes the results of a saber analysis with directed graphs.
 #'
 #' @param x [\\code{saber.result}] \cr
-#'   TODO
-#' @param h [\code{integer(1)}] \cr
-#'   TODO
-#' @param v [\code{integer(1)}] \cr
-#'   TODO
-#' @param shape [\code{character(1)}] \cr
-#'   TODO
-#' @param edge.width [\code{integer(1)}] \cr
-#'   TODO
-#' @param testNiveaus [\code{double()}] \cr
-#'   TODO
+#'   Result from \code{saberIt}.
+#' @param test.niveaus [\code{numeric()}] \cr
+#'   Which test niveaus should be visualized? At most, 4 niveaus can be specified.
+#' @param lty [\code{character()}]\cr
+#'   Line types for the test niveaus. Must have the same length as \code{test.niveaus},
+#'   allowed values are the linetypes of \code{plot.igraph}.
+#' @param radius [\code{numeric(1)}]
+#'   Radius of nodes. Default is 48, should be increased for long algorithm names.
+#' @param plot.legend [\code{logical(1)}]
+#'   Should a legend be included? Default is \code{TRUE}.
 #' @param ... [any] \cr
-#'   Not used.
-#' @return Nothing, as a side effect, a plot is generated.
-#'
-#'
+#'   Additional parameters for \code{plot.igraph}.
+#' @return \code{invisible(NULL)}, as a side effect, a plot is generated.
 #'
 #'
 #' @export
 
-
-# Funktion - Erstellt die gerichteten Graphen zu den berechneten 
-#               Testergebnissen 
-# Eingabe: 
-# - testResults: Eine Liste der Laenge 
-#     + results: Eine Liste mit den jeweili:gen Matrizen zu den jeweiligen Cluster-
-#               gruppen, in denen die jeweiligen p-Werte der einzelnen paarweisen
-#               Tests stehen
-#     + rankMatrix: Eine Matrix in dem in Zeile i und Spalte j der Durchschnittsrang
-#               der Performance des j-ten Algorithmus in der i-ten Clustergruppe
-#               ist
-# - data: Der gegebene Datensatz
-# - confName: Angabe des Spalennames mit den Algorithmen
-# - h: Hoehe des Graphenfenster
-# - v: Breite des Graphenfenster
-# - design_matrix: Kreiere eine Connectionmatrix mit den entsprechenden Verbin-
-#                  dungen zu den einelnen Niveauss
-# - design_edges: Funktion, die den Verbindungsvektor zwischen den vertexes
-#                 erstellt
-# - useTransitivity: Funktion um die Transitive Verbindungen innerhalb der 
-#                    Graphen nutzen
-# - searchForTransitivity: Funktion, die herrausfindet, ob eine gegebene 
-#                          Connection durch andere gegebene Connections wieder-
-#                          gespiegelt werden kann
-# - transform_connections: Funktion, die unnoetige Connections entfernt, die 
-#                         durch niedrigere Niveaus bereits wiedergespiegelt
-#                          werden.
-# - shape: Form der Vertexes (Character)
-# - edge.width: Pfeilbreite (Integer)
-# - testNiveaus: Nach welchen Testniveaus sollen die connections gesetzt werden
-#                (Doubles aus [0,1]) (Maximal 6 Niveaus)
-# - clustmittel: Clustermittelpunkte (Mittelpunkte der einzelnen Parameterein-
-#                stellungen in den einzelnen Clustergruppen)
-# Rueckgabe:
-# Ein Plot mit den benoetigten gerichteten Graphen zu allen Clustergruppen
-plot.saber <- function(x,
-                       shape = "circle",
-                       edge.width = 1,
-                       testNiveaus = c(1e-10, 1e-5, 1e-2, 5e-1),
-                       h = NA,
-                       v = NA,
-                       stetig = TRUE,
-                       edge.size = 0.1,
-                       radius = 48,
-                       VertexlabelSize = 1,
-                       legendTextSize = 1,
-                       subtitleSize = 1,
-                       printlegend = TRUE,
-                       ...
-){
+plot.saber = function(x,
+  test.niveaus = c(1e-10, 1e-5, 1e-2, 5e-2),
+  lty = c("solid", "longdash", "dotdash", "dotted")[1:length(test.niveaus)],
+  radius = 48, print.legend = TRUE, ...) {
+  
+  assertNumeric(test.niveaus, lower = 0, upper = 1, min.len = 1, max.len = 4)
+  assertSubset(lty, c("solid", "dashed", "dotted", "dotdash", "longdash", "twodash"))
+  assertNumber(radius, lower = 0)
+  assertFlag(print.legend)
+  
+  
+  od = order(test.niveaus, decreasing = TRUE)
+  test.niveaus = test.niveaus[od]
+  lty = lty[od]
+  
   saber.result = x
-  clustmittel = round(saber.result$cluster.mittel,2)
-  rankMatrix = saber.result$rank.matrix
-  all_pValues = saber.result$test.results
-  algoName = saber.result$pars$algoName
-  data = saber.result$pars$data
+  algo.names = levels(saber.result$pars$data[, saber.result$pars$algoName])
   
-  if(length(testNiveaus) > 6){
-    stop("Hey du Vollhonk! Du darfst nur maximal 6 Niveaus nutzen. Lies doch mal
-         die Doku! :D")
-  }
+  # First: Plot for test on complete data set
+  plot.data = getEdges(
+    saber.result$test.complete.data$ranks,
+    saber.result$test.complete.data$post.hoc,
+    algo.names, test.niveaus)
   
-  # Kreiere connection_matrix fuer die Beziehungen zwischen den Algorithmen: 
-  # erstelle Basis connection_matrix:
-  algo.Name <- levels(data[, algoName])
-  count_algos <- length(algo.Name)
-  connection_matrix <- matrix(rep(0, count_algos^2),
-                              nrow = count_algos, 
-                              ncol = count_algos)
-  diag(connection_matrix) <- rep(0, count_algos)
-  rownames(connection_matrix) <- algo.Name
-  colnames(connection_matrix) <- algo.Name
+  makeSinglePlot(
+    vertices = algo.names,
+    vertex.labels = paste(algo.names,"\n", round(saber.result$test.complete.data$ranks, digits = 4)),
+    order = order(saber.result$test.complete.data$ranks),
+    edges = plot.data$edges,
+    line.types = lty[plot.data$line.types],
+    radius = radius,
+    subtitle = sprintf("Friedmann test p-Value:\n %4g", saber.result$test.complete.data$global),
+    main = "Global test results", edge.arrow.size = 1,
+    ...)
   
-  # Erstelle passend zu jeder Testmatrix ein gerichteter Graph:
-  # Passende Fenstergroesse festlegen, falls nicht schon vorgegeben:
-  if(is.na(h) || is.na(v)){
-    clusteranzahl <- length(saber.result$cluster.sizes)
-    h <- ceiling(sqrt(clusteranzahl + 1))
-    v <- h
-  }
   
-  par(mfrow = c(h,v))
-  # opar <- par(mfrow = c(h, v))
-  # on.exit(par(opar))
-  for(i in 1:length(all_pValues)){
-    # Erstelle passend zu den Testresultaten zum aktuellen Niveau die
-    # connectionsmatrix:
-    sorted_perf <- sort(rankMatrix[i, ], index = TRUE) 
-    ord_index <- sorted_perf$ix
-    ord_ranks <- sorted_perf$x 
+  # Set plot grid
+  n.plots = length(saber.result$test.clusters$global) + print.legend
+  h = ceiling(sqrt(n.plots))
+  v = if(h * (h - 1) >= n.plots) h - 1 else h
+  par(mfrow = c(v, h))
+  on.exit(par(mfrow = c(1, 1)))
+  
+  # Second plots: Test result in clusters
+  for (i in seq_along(saber.result$test.clusters$global)) {
+    plot.data = getEdges(
+      saber.result$test.clusters$ranks[i, ],
+      saber.result$test.clusters$post.hoc[[i]],
+      algo.names, test.niveaus)
     
-    connections <- list()
-    testNiveaus <- sort(testNiveaus) # Falls die Niveaus nicht geordnet eingegeben werden
-    for(j in 1:length(testNiveaus)){
-      connections[[j]] <- design_matrix(pValues = all_pValues[[i]], 
-                                        connectMatrix = connection_matrix,
-                                        order = ord_index,
-                                        testNiveau = testNiveaus[j])
-    }
-    correct_connect <- transform_connections(connections)
-    # Transitivitaet ausnutzen und entsprechende Verbindungen entfernen:
-    lty_type <- c()
-    arrows <- c()
-    nNiveaus <- length(testNiveaus)
-    for(j in 1:nNiveaus){
-      # Entferne durch die Transitivitaetseigenschaft ueberfluessige Verbindungen
-      correct_connect[[j]] <-  useTransitivity(correct_connect[[j]],
-                                               searchForTransitivity)
-      lty_type <- c(lty_type, rep(j, sum(correct_connect[[j]])))
-      ## Wenn zu viele Niveaus gewaehlt werden 
-      ## funktioniert das hier nicht ( > 6 )
-      
-      # Entsprechend der connections-Matrix werden die edges = Pfeile erstellt
-      arrows <- c(arrows, design_edges(correct_connect[[j]]))
-    }
-    
-    # Erstelle das Graphenobjekt mit im Kreis der Rangordnung nach geordnete
-    # Algorithmen.
-    graphobject <- make_empty_graph() + vertices(algo.Name) + edges(arrows)
-    coords <- layout_in_circle(graphobject,
-                               order = ord_index)
-    # Einstellungsparameter der edges:
-    k <- gsize(graphobject)
-    edge_attr(graphobject) <- list(color = rep("black", k) )
-    ############################################################################
-    # Einstellungsparameter der vertexes = "Kreise"
-    vertex_names <- paste(colnames(rankMatrix),"\n", round(rankMatrix[i,], digits = 4))
-    vertex_attr(graphobject) <- list(
-      name = vertex_names,
-      color = rep("white", count_algos),
-      size = rep(radius, count_algos),
-      shape = rep(shape, count_algos))
-    vertex_attr(graphobject)$color[ord_index[1]] <- rgb(255 ,83 ,40 , 
-                                                        maxColorValue = 256)
-    subtitle <- ""
-    if(stetig){
-      subtitle <- c("Clustermittel: \n")
-      rnames <- rownames(clustmittel)
-      nr <- nrow(clustmittel)
-      if(nr != 1){
-        for(k in 1:(nr - 1)){
-          subtitle <- paste(subtitle, rnames[k], "=", clustmittel[k,i],",")    
-        }
-      }
-      subtitle <- paste(subtitle, rnames[nr], "=", clustmittel[nr,i])
-    }    
-    plot(graphobject, 
-         rescale = FALSE,
-         layout = coords,
-         edge.arrow.size = edge.size,
-         vertex.label.cex = VertexlabelSize,
-         vertex.label.color = "black",
-         edge.width = edge.width,
-         edge.lty = lty_type)
-    title(sub = subtitle, cex.sub = subtitleSize )
+    makeSinglePlot(
+      vertices = algo.names,
+      vertex.labels = paste(algo.names,"\n", round(saber.result$test.clusters$ranks[i, ], digits = 4)),
+      order = order(saber.result$test.clusters$ranks[i, ]),
+      edges = plot.data$edges,
+      line.types = lty[plot.data$line.types],
+      radius = radius,
+      subtitle = sprintf("Friedmann test p-Value:\n %4g", saber.result$test.clusters$global[i]),
+      main = paste0("Results in cluster ", i),
+      ...)
   }
-  plot.new()
-  if(printlegend)
-  {
-    legend(title = "Testniveaus",
-           "center",
-           legend = testNiveaus, 
-           lty = 1:nNiveaus,
-           col = "black",
-           bty = "n",
-           cex = legendTextSize)
-    par(mfrow = c(1,1))
+  
+  # Add legend for test niveau linetype
+  if (print.legend) {
+    plot.new()
+    legend(title = "Test Niveaus",
+      "center",
+      legend = test.niveaus, 
+      lty = lty,
+      col = "black",
+      bty = "n",
+      cex = 1)
   }
+  
+  return(invisible(NULL))
 }
