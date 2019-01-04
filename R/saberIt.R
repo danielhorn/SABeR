@@ -92,21 +92,18 @@ saberIt = function(data, perfName, expParName, algoName, replName,
   data = merge(data, clusters)
   data.clusterd = split(data, data$.clustID)
   
-  # Cluster-Mittelpunkte
-  cluster.mittel = sapply(data.clusterd, function(d) colMeans(d[, expParName]))
-  
   # Perform global test in each cluster
   global = lapply(data.clusterd, function(d) {
     friedman.test(y = data[, perfName], groups = data[, algoName], blocks = data[, ".expreplID"])$p.value
   })
-  
   
   # Perform pairwise tests in each cluster
   post.hoc = lapply(data.clusterd, function(d) {
     pairwiseNemenyiTests(y = d[, perfName], groups =  d[, algoName], blocks = d[, ".expreplID"])
   })
   
-  result = structure(list(
+  # Build the result object
+  structure(list(
     test.complete.data = complete.data,
     test.clusters = list(
       global = global,
@@ -114,8 +111,6 @@ saberIt = function(data, perfName, expParName, algoName, replName,
       ranks = t(BBmisc::extractSubList(post.hoc, "rank.means", simplify = TRUE))
     ),
     clusters = clusters,
-    cluster.mittel = cluster.mittel,
-    cluster.sizes = table(clusters$.clustID),
     pars = list(
       data = data,
       perfName = perfName,
@@ -124,6 +119,4 @@ saberIt = function(data, perfName, expParName, algoName, replName,
       replName = replName
     )
   ), class = "saber")
-  
-  return(result)
 }
